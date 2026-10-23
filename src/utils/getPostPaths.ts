@@ -23,6 +23,14 @@ function getIdSlug(id: string): string {
 function getPostSlugPath(id: string, filePath: string | undefined): string {
   const pathSegments = getPostPathSegments(filePath);
   const slug = getIdSlug(id);
+  // Folder-based posts use index.md while keeping the folder's public URL.
+  if (
+    filePath &&
+    /\/index\.(md|mdx)$/.test(filePath) &&
+    pathSegments.length > 0
+  ) {
+    return pathSegments.join("/");
+  }
   return pathSegments.length > 0
     ? [...pathSegments, slug].join("/")
     : String(slug);
